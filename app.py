@@ -9,9 +9,10 @@ db = client.dblogintest
 app = Flask(__name__)
 
 
-@app.route('/')
-def login():
-    return render_template('login.html')
+@app.route('/home')
+def home():
+    return render_template('index.html')
+
 
 # 회원가입을 해준다.
 @app.route('/join', methods=['GET', 'POST'])
@@ -36,13 +37,11 @@ def join():
         # 위의 확인 작업에서 True를 반환하면 DB에 저장하도록한다.
         # False를 반환하면 "에러"문이 뜨게 한다.
 
-        # email 유효성 확인
+        # # email 유효성 확인
         # find_email = db.userinfo.find_one({'email':email_receive})
         # if find_email is not None:
-        #     if re.match('^[a-zA-Z0-9]+@[a-z]+.[a-z]{2,5}$', email_receive) is not None:
+        #     if re.match('^[a-zA-Z0-9]+@[a-z]+\.[a-z]{2,5}$', email_receive) is not None:
         #         return True
-        # else:
-        #     return False
 
         # # password 유효성 확인
         # if re.match('^([a-z]+)([A-Z]*)([0-9]+)[a-z0-9\d$@$!%*#?&]{8,}$', password_receive) is not None:
@@ -66,20 +65,26 @@ def join():
         return jsonify({'msg': '회원가입 완료되었습니다'})
 
 
-@app.route('/main', methods=['GET', 'POST'])
-def main():
+
+# 로그인 하기 (페이지 처음 화면)
+@app.route('/' ,methods=['GET', 'POST'])
+def login():
     if request.method == 'GET':
-        return render_template('index.html')
+        return render_template('login.html')
     else:
         # DB에 저장된 이메일과 비밀번호와 동일한가?
         email = request.form['email_give']
         password = request.form['password_give']
 
-        find_email_password = db.userinfo.find_one({'email': email, 'password': password})
-        if find_email_password is not None:
-            return jsonify({'result': 'success', 'msg': '로그인 완료'})
+        find_info = db.userinfo.find_one({'email': email, 'password': password})
+        if find_info is not None:
+            return jsonify({'result': 'success' , 'msg': '로그인 완료!'})
         else:
-            return jsonify({'result': 'error'})
+            return jsonify({'result': 'False' , 'msg': '로그인 실패'})
+            
+
+
+
         
 
 

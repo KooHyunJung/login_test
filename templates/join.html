@@ -37,7 +37,7 @@
     </div>
 
     <div style="text-align: center; width: 400px; height: 80px; border: solid 1px gray; margin: 20px auto 100px auto; background: white;">
-        <div style="margin: 28px auto 28px auto;"> 계정이 있으신가요? <a href="login">로그인</a></div>
+        <div style="margin: 28px auto 28px auto;"> 계정이 있으신가요? <a href="/">로그인</a></div>
     </div>
 
 <script>
@@ -56,16 +56,13 @@
                 dataType: 'json',
                 success: function (response){
                     alert(response['msg'])
-                    location.replace('login')
+                    location.replace('/')
                 },
                 error: function (request, status, error) {
                     console.log("에러");
                 },
-                complete: function () {
-                    console.log("완료");
-                }
             });
-    });
+       });
 </script>
 </body>
 </html>

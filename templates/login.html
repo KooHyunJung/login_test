@@ -9,31 +9,34 @@
 </head>
 
 <script> //로그인 버튼을 입력하면 함수 login() 실행.
-        function login(){
-            // 변수 email, password에 input 값을 저장한다.
-        let email = $('#input_email').val()
-        let password = $('#input_password').val()
-            // "/"주소에 POST 방식, json형식으로 data를 보낸다.
-            $.ajax({
-                url: "/",
-                data: { email_give:email,
-                    password_give:password
-                },
-                method: 'POST',
-                dataType: 'json',
-                success: function (response){
-                        location.replace('/main')
-                },
-                error: function (request, status, error) {
-                    alert('이메일 계정 혹은 비밀번호가 올바르지 않습니다')
-                    console.log("에러");
-                },
-                complete: function () {
-                    console.log("완료");
+    function login(){
+        // 변수 email, password에 input 값을 저장한다.
+    let email = $('#input_email').val()
+    let password = $('#input_password').val()
+        // "/"주소에 POST 방식, json형식으로 data를 보낸다.
+        $.ajax({
+            url: "/",
+            data: { email_give:email,
+                password_give:password
+            },
+            method: 'POST',
+            dataType: 'json',
+            success: function (response){
+                if (response['result']=='success'){
+                    alert(response['msg'])
+                    window.console.log("로그인 완료")
+                    location.replace('/home')
                 }
-            });
-        };
-    </script>
+                else if (response['result']=='False'){
+                    alert(response['msg'])
+                    window.console.log("로그인 실패")
+                }
+           
+            }
+        });
+    };
+</script>
+
 
 <body>
 <body style="background: rgb(245,245,245)">
