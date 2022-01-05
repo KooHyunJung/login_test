@@ -1,13 +1,17 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 from pymongo import MongoClient
 import certifi
 import re
+import jwt
+import datetime
+import hashlib
                                                                                                                     
 client = MongoClient('mongodb+srv://test:sparta@cluster0.u0c0t.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())         
 db = client.dblogintest
 
 app = Flask(__name__)
 
+SECRET_KEY = 'SPARTA'
 
 @app.route('/home')
 def home():
@@ -24,6 +28,8 @@ def join():
         password_receive = request.form['password_give']
         name_receive = request.form['name_give']
         nickname_receive = request.form['nickname_give']
+
+        pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
 
         # 이메일은 어떤형식을 유지해야 하는가?
             # 중복확인, '@' '.' 이 있는지, 영문과 숫자 확인.
@@ -55,14 +61,15 @@ def join():
         # if re.match('^([a-zA-Z]+)[a-zA-Z0-9]{3,}$', nickname_receive) is not None:
         #     return True
 
+
         doc = {
             'email': email_receive,
-            'password' : password_receive,
+            'pw_hash' : pw_hash,
             'name' : name_receive,
             'nickname' : nickname_receive
         }
         db.userinfo.insert_one(doc)
-        return jsonify({'msg': '회원가입 완료되었습니다'})
+        return jsonify({'result': 'success','msg': '회원가입 완료!'})
 
 
 
@@ -76,9 +83,16 @@ def login():
         email = request.form['email_give']
         password = request.form['password_give']
 
-        find_info = db.userinfo.find_one({'email': email, 'password': password})
+        pw_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+        find_info = db.userinfo.find_one({'email': email, 'pw_hash': pw_hash})
         if find_info is not None:
-            return jsonify({'result': 'success' , 'msg': '로그인 완료!'})
+            payload = {
+            'id': email,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60*350)
+            }
+            token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+            return jsonify({'result': 'success' , 'msg': '로그인 완료!' , 'token': token})
         else:
             return jsonify({'result': 'False' , 'msg': '로그인 실패'})
             
