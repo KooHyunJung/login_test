@@ -11,7 +11,7 @@ db = client.dblogintest
 
 app = Flask(__name__)
 
-SECRET_KEY = 'SPARTA'
+SECRET_KEY = 'AHLONG'
 
 @app.route('/home')
 def home():
@@ -28,7 +28,7 @@ def join():
         password_receive = request.form['password_give']
         name_receive = request.form['name_give']
         nickname_receive = request.form['nickname_give']
-
+        # 해킹을 방하기 위해 해시함수로 password 암호화 해서 저장.
         pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
 
         # 이메일은 어떤형식을 유지해야 하는가?
@@ -61,7 +61,6 @@ def join():
         # if re.match('^([a-zA-Z]+)[a-zA-Z0-9]{3,}$', nickname_receive) is not None:
         #     return True
 
-
         doc = {
             'email': email_receive,
             'pw_hash' : pw_hash,
@@ -83,14 +82,15 @@ def login():
         email = request.form['email_give']
         password = request.form['password_give']
 
+        # 로그인 창에 입력받은 password를 똑같이 해쉬함수로 암호화해서 DB에서 확인
         pw_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
         find_info = db.userinfo.find_one({'email': email, 'pw_hash': pw_hash})
         if find_info is not None:
-            payload = {
-            'id': email,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60*350)
-            }
+            # 클라이언트 측에서 로그인 관리하도록 쿠키 구워주자.
+            # jwt 헤더.시크릿키.해쉬알고리즘
+            payload = {'id': email, #해킹당해도 위험 부담이 적은 유니크한 값으로 사용자 정보를 받고 / 토큰 유효시간 정해주기
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60*300)}
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
             return jsonify({'result': 'success' , 'msg': '로그인 완료!' , 'token': token})
         else:
