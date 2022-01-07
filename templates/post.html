@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- cookie -->
+    <script src=“https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js”></script>
+
+    <link rel="stylesheet" href="../static/style.css">
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <title>test</title>
+
+    <script>
+    function to_post() {
+        window.location.href = "/post"
+    }
+
+    function to_home() {
+        window.location.href = "/home"
+    }
+
+
+    function post(){
+        let post_url = $('#post-url').val()
+        let post_text = $('#post-text').val()
+        $.ajax({
+            url: "/post",
+            data: { post_url:post_url,post_text:post_text},
+            method: 'POST',
+            dataType: 'json',
+            success: function (response){
+                if (response['result']=='success'){
+                    alert(response['msg'])
+                    window.console.log("완료")
+                    window.location.replace('/home')
+                }
+                else {
+                    alert("업로드 실패 !")
+                    console.log("실패")
+                }
+            }
+        });
+    };
+
+    </script>
+</head>
+<body style="background: rgb(245,245,245)">
+
+    <div id="main">
+        <div id="header">
+            <img class="header-icon" src="../static/img/camera@3x.png" />
+            <img id="logo" src="../static/img/insta-logo.png" />
+            <img class="header-icon" src="../static/img/dm@3x.png" />
+        </div>
+
+        
+        <div class="mypost" >
+            <label>게시물 URL</label>
+            <input id="post-url" type="url" class="form-control" >
+            
+            <label>내용 달기...</label>
+            <input id="post-text" type="text" class="form-control" >
+            <div class="mybtns">
+                <button onclick="post()" type="button" class="btn btn-dark">게시물 업로드</button>
+            </div>
+        </div>
+
+        
+        <div id="footer">
+            <div id="icon-wrapper">
+                <img onclick="to_home()" src="../static/img/home@3x.png">
+                <img src="../static/img/search@3x.png">
+                <img onclick="to_post()" src="../static/img/trending@3x.png">
+                <img src="../static/img/like@3x.png">
+                <img onclick="to_home()" src="../static/img/home@3x.png">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
