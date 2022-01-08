@@ -1,3 +1,4 @@
+from os import name
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from pymongo import MongoClient
 import certifi
@@ -12,6 +13,18 @@ db = client.dblogintest
 app = Flask(__name__)
 
 SECRET_KEY = 'AHLONG'
+
+# user정보 찾는 함수
+def decode():
+    # 쿠키를 저장할 때, '/'안에 저장해야 다른 페이지에서도 사용가능.
+    # 알고리즘 풀때는 s를 붙여야 한다.
+    key = request.cookies.get('99token')
+    payload = jwt.decode(key, SECRET_KEY, algorithms='HS256')
+    
+    info = db.userinfo.find_one({'email':payload['id']})
+    return info
+
+
 
 @app.route('/home')
 def home():
@@ -67,7 +80,8 @@ def join():
             'pw_hash' : pw_hash,
             'name' : name_receive,
             'nickname' : nickname_receive,
-            'post' : []
+            'pro_img' : "https://w.namu.la/s/6d37d2792f61b69511edc288e16598d0722ff0407af67089c0004ddeda7ad7b9bdc0b2e4880db9548efe21f2082a4c34545902a67aaa00eafce75c7f89fcdcb81cbca1649556026b3c72a3ee9382429b",
+            'pro_msg' : "안녕하세요 :)",
         }
         db.userinfo.insert_one(doc)
         return jsonify({'result': 'success','msg': '회원가입 완료!'})
@@ -115,17 +129,21 @@ def post():
                 'post_url': post_url,
                 'post_text' : post_text,
                 'post_time' : dt_now
-                #'post_coment' : [] 선생님이 지혜를 쓸까..
             }
         db.post.insert_one(doc)
         return jsonify({'result': 'success','msg': '업로드 완료!'})
 
+
 # 게시물 home에 붙이기
 @app.route("/post/get", methods=["GET"])
 def post_get():
-    # 사용자 정보는 우째 가져오나.. 토큰으로 가져오나? 어떻게...?
+    info = decode()
+    nickname = info['nickname']
+    pro_img = info['pro_img']
+    
     post_list = list(db.post.find({}, {'_id': False}))
-    return jsonify({'post': post_list})
+
+    return jsonify({'post': post_list, 'nickname':nickname, 'pro_img':pro_img})
 
 
 

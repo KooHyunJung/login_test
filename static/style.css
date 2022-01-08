@@ -7,10 +7,14 @@ body {
 /* 게시물올리기 */
 .mypost {
   /* margin-top: 20%; */
-  padding: 40% 10%;
+  padding: 50% 10%;
   background-color: white;
   border-bottom: 1px solid lightgray;
   width: 100%;
+}
+.mypost img {
+  margin: 0 0 3% 38%;
+  width: 20%;
 }
 .mybtns {
   display: flex;

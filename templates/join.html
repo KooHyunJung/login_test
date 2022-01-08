@@ -5,7 +5,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- cookie -->
     <script src=“https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js”></script>
-
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     <title>test</title>
 </head>
@@ -34,7 +33,7 @@
                 <input style="width: 300px; height: 24px; margin: auto;" type="text" class="form-control" id="input_password" placeholder="name@example.com">
                 <label style="font-size: 13px; padding: 4px 10px; margin-left: 30px; margin-top: 2px;" for="input_password">비밀 번호</label>
             </div>
-            <button id="join_button" style="width: 300px; height: 32px; margin: auto; font-size: 14px; font-weight: bolder; margin-top: 8px;" type="button" class="btn btn-primary">가입</button>
+            <button onclick="join()" style="width: 300px; height: 32px; margin: auto; font-size: 14px; font-weight: bolder; margin-top: 8px;" type="button" class="btn btn-primary">가입</button>
         </div>
     </div>
 
@@ -42,32 +41,6 @@
         <div style="margin: 28px auto 28px auto;"> 계정이 있으신가요? <a href="/">로그인</a></div>
     </div>
 
-<script>
-       $('#join_button').click(function join(){
-        let email = $('#input_email').val()
-        let password = $('#input_password').val()
-        let name = $('#input_name').val()
-        let nickname = $('#input_nickname').val()
-            // 값(정보)을 받아 보내준다.
-            $.ajax({
-                url: "/join",
-                data: { 
-                    email_give:email, name_give:name, nickname_give:nickname ,password_give:password
-                },
-                method: 'POST',
-                dataType: 'json',
-                success: function (response){
-                    if (response['result']=='success') {
-                        alert(response['msg'])
-                        location.replace('/')
-                    }
-                    else {
-                        alert('회원가입 오류 !')
-                        window.console.log("회원가입 실패")
-                    }
-                }
-            });
-       });
-</script>
+    <script type="text/javascript" src="../static/all.js"></script>
 </body>
 </html>

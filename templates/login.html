@@ -5,42 +5,10 @@
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <!-- cookie -->
     <script src=“https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js”></script>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <title>test</title>
 </head>
-
-<script> //로그인 버튼을 입력하면 함수 login() 실행.
-    function login(){
-        // 변수 email, password에 input 값을 저장한다.
-    let email = $('#input_email').val()
-    let password = $('#input_password').val()
-        // "/"주소에 POST 방식, json형식으로 data를 보낸다.
-        $.ajax({
-            url: "/",
-            data: { email_give:email,
-                password_give:password
-            },
-            method: 'POST',
-            dataType: 'json',
-            success: function (response){
-                if (response['result']=='success'){
-                    alert(response['msg'])
-                    window.console.log("로그인 완료")
-                    //쿠키 저장하기 $.cookie(‘저장할이름’, token의 값, 저장위치)
-                    $.cookie('99token', response['token'],{path:'/home'})
-                    window.location.replace('/home')
-                }
-                else if (response['result']=='False'){
-                    alert(response['msg'])
-                    console.log("로그인 실패")
-                }
-           
-            }
-        });
-    };
-</script>
 
 
 <body>
@@ -68,5 +36,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../static/all.js"></script>
 </body>
 </html>
