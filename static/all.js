@@ -87,12 +87,12 @@ type: 'GET',
 url: '/post/get',
 data: {},
 success: function (response) {
-        let nickname = response['nickname']
-        let pro_img = response['pro_img']
         let rows = response['post']
         // JS reverse()함수 사용해서 리스트로 받은 DB데이터를 역순정렬한다
         let row = rows.reverse()
         for (let i = 0; i < rows.length; i++) {
+            let nickname = row[i]['nickname']
+            let pro_img = row[i]['pro_img']
             let post_url = row[i]['post_url']
             let post_text = row[i]['post_text']
             let post_time = row[i]['post_time']
@@ -104,7 +104,7 @@ success: function (response) {
                     <p>${nickname}</p>
                 </div>
                 <div class="right-wrapper">
-                    <img src="../static/img/more@3x.png">
+                    <img onclick="post_del()" value="0" src="../static/img/more@3x.png">
                 </div>
             </div>
             <div class="post-body">

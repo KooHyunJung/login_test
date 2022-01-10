@@ -121,29 +121,33 @@ def post():
     if request.method == 'GET':
         return render_template("post.html")
     else:
+        info = decode()
+        email = info['email']
+        nickname = info['nickname']
+        pro_img = info['pro_img']
+
         post_url = request.form['post_url']
         post_text = request.form['post_text']
         dt_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         doc = {
+                'email' : email,
+                'nickname': nickname,
+                'pro_img': pro_img,
                 'post_url': post_url,
                 'post_text' : post_text,
-                'post_time' : dt_now
+                'post_time' : dt_now,
+                'comment': []
             }
         db.post.insert_one(doc)
         return jsonify({'result': 'success','msg': '업로드 완료!'})
 
 
-# 게시물 home에 붙이기
+# 게시물 붙이기
 @app.route("/post/get", methods=["GET"])
 def post_get():
-    info = decode()
-    nickname = info['nickname']
-    pro_img = info['pro_img']
-    
     post_list = list(db.post.find({}, {'_id': False}))
-
-    return jsonify({'post': post_list, 'nickname':nickname, 'pro_img':pro_img})
+    return jsonify({'post': post_list})
 
 
 
