@@ -91,7 +91,7 @@ success: function (response) {
         // JS reverse()함수 사용해서 리스트로 받은 DB데이터를 역순정렬한다
         let row = rows.reverse()
         for (let i = 0; i < rows.length; i++) {
-            let index = row[i]['index']
+            let num = row[i]['num']
             let nickname = row[i]['nickname']
             let pro_img = row[i]['pro_img']
             let post_url = row[i]['post_url']
@@ -105,7 +105,7 @@ success: function (response) {
                     <p>${nickname}</p>
                 </div>
                 <div class="right-wrapper">
-                    <img onclick="post_del()" value=${index} src="../static/img/more@3x.png">
+                    <img onclick="post_del(${num})" src="../static/img/more@3x.png">
                 </div>
             </div>
             <div class="post-body">
@@ -142,7 +142,7 @@ success: function (response) {
                     <img class="post-icon-2" src="../static/img/comment@3x.png">
                     <input type="text" id="comment" placeholder="댓글 달기...">
                     <div class="input-btn">
-                    <label class="comment-btn" onclick="save_comment()">게시</label>
+                    <label class="comment-btn" onclick="save_comment(${num})">게시</label>
                     </div>
                 </div>
             </div>
@@ -155,33 +155,34 @@ success: function (response) {
 
 
 //게시물 삭제
-// function post_del() {
-//     let postID = $('value').val
-//     $.ajax({
-//         url: '/post/delate',
-//         data: {postID:postID},
-//         method: 'POST',
-//         dataType: 'json',
-//         success: function(response){
-//             if (response['result']=='success'){
-//                 alert(response['msg'])
-//                 window.console.log("완료")
-//             }
-//             else {
-//                 alert("작성자만 삭제 가능합니다")
-//                 console.log("실패")
-//             }
-//         }
-//     })
-// }
+function post_del(a) {
+    let postID = a
+    $.ajax({
+        url: '/post/delate',
+        data: {postID:postID},
+        method: 'POST',
+        dataType: 'json',
+        success: function(response){
+            if (response['result']=='success'){
+                alert(response['msg'])
+                window.console.log("완료")
+            }
+            else if (response['result']=='False'){
+                alert(response['msg'])
+                console.log("실패")
+            }
+        }
+    })
+ }
 
 
-// 게시물 댓글 저장
-// function comment(){
+// POST 댓글 저장
+// function comment(a){
 //     let comment = $('#comment').val()
+//     let postID = a
 //     $.ajax({
 //         url: "/comment",
-//         data: {comment:comment},
+//         data: {comment:comment,postID:postID},
 //         method: 'POST',
 //         dataType: 'json',
 //         success:function(response){

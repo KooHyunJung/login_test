@@ -1,4 +1,5 @@
 from os import name
+from types import MethodType
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from pymongo import MongoClient
 import certifi
@@ -137,10 +138,14 @@ def post():
         post_url = request.form['post_url']
         post_text = request.form['post_text']
         dt_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-        num = 0
+                                         # query문 orderby 정렬
+        latest_num = (db.post.find_one({"$query": {}, "$orderby": {"num": -1}}))
+        try:
+            num = latest_num['num']
+        except TypeError:
+            num = 0
         doc = {
-                'index': num +1,
+                'num': num + 1,
                 'email' : email,
                 'nickname': nickname,
                 'pro_img': pro_img,
@@ -150,8 +155,9 @@ def post():
                 'comment': []
             }
         db.post.insert_one(doc)
-        num += 1
         return jsonify({'result': 'success','msg': '업로드 완료!'})
+        
+        
 
 
 # 게시물 보여주기
@@ -161,17 +167,42 @@ def post_get():
     return jsonify({'post': post_list})
 
 
-# #게시물 삭제
-# @app.route('/post/delate', methods= ['POST'])
-# def post_delate():
-#     postID = request.form['postID']
+#게시물 삭제
+@app.route('/post/delate', methods= ['POST'])
+def post_delate():
+    postID = int(request.form['postID'])
+    info = decode()
+    email = info['email']
 
-#     info = post_info()
-#     email = info['email']
+    find_post = db.post.delete_one({'email':email, 'num':postID})    
+    if find_post is not None:
+        return jsonify({'result': 'success', 'msg': '삭제 완료'})
+    else:
+        return jsonify({'result': 'False' , 'msg': '게시물 작성자만 삭제 가능'})
 
-#     find = db.post.delete_one({'email':email, 'index':postID})    
-#     if find is not None:
-#         return jsonify({'result': 'success', 'msg': '삭제 완료'})
+
+#============================ POST 댓글 ====================================
+#댓글 달기
+# @app.route('/post/cmment', methods=['POST'])
+# def post_comment():
+#     comment = request.form['comment']
+#     post_num = request.form['post_num']
+#     comments = (db.post.find_one({'num': num}))['comment']
+#     user_info = decode()
+#     email = user_info['email']
+#     nickname = user_info['nickname']
+
+#     comments.append({
+#         'comment_num':comment_num,
+#         'email':email,
+#         'nickname':nickname,
+#         'comment':comment
+#     })
+    
+#     db.feeds.update_one({'num': num}, {'$set': {'comment': comments}})
+#     return jsonify({'result': 'success', 'msg': '댓글 완료'})
+
+
 
 
 
