@@ -81,6 +81,7 @@ function post(){
     });
 };
 
+
 //게시물 붙이기 
 $.ajax({
 type: 'GET',
@@ -167,8 +168,8 @@ function post_del(a) {
                 alert(response['msg'])
                 window.console.log("완료")
             }
-            else if (response['result']=='False'){
-                alert(response['msg'])
+            else {
+                alert("작성자만 삭제 가능합니다.")
                 console.log("실패")
             }
         }
@@ -176,26 +177,26 @@ function post_del(a) {
  }
 
 
-// POST 댓글 저장
-// function comment(a){
-//     let comment = $('#comment').val()
-//     let postID = a
-//     $.ajax({
-//         url: "/comment",
-//         data: {comment:comment,postID:postID},
-//         method: 'POST',
-//         dataType: 'json',
-//         success:function(response){
-//             if (response['result']=='success'){
-//                 alert(response['msg'])
-//                 window.console.log("완료")
-//             }
-//             else {
-//                 window.console.log("실패")
-//             }
-//         }
-//     })
-// }
+//POST 댓글 저장
+function save_comment(a){
+    let comment = $('#comment').val()
+    let postID = a
+    $.ajax({
+        url: "/post/cmment",
+        data: {comment:comment,postID:postID},
+        method: 'POST',
+        dataType: 'json',
+        success:function(response){
+            if (response['result']=='success'){
+                alert(response['msg'])
+                window.console.log("완료")
+            }
+            else {
+                window.console.log("실패")
+            }
+        }
+    })
+}
 
 //페이지 이동
 function to_post() {

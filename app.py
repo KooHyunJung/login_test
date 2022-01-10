@@ -177,30 +177,31 @@ def post_delate():
     find_post = db.post.delete_one({'email':email, 'num':postID})    
     if find_post is not None:
         return jsonify({'result': 'success', 'msg': '삭제 완료'})
-    else:
-        return jsonify({'result': 'False' , 'msg': '게시물 작성자만 삭제 가능'})
+
 
 
 #============================ POST 댓글 ====================================
-#댓글 달기
-# @app.route('/post/cmment', methods=['POST'])
-# def post_comment():
-#     comment = request.form['comment']
-#     post_num = request.form['post_num']
-#     comments = (db.post.find_one({'num': num}))['comment']
-#     user_info = decode()
-#     email = user_info['email']
-#     nickname = user_info['nickname']
+#댓글 DB 저장
+@app.route('/post/cmment', methods=['POST'])
+def post_comment():
+    comment = request.form['comment']
+    postID = int(request.form['postID'])
+    comments = (db.post.find_one({'num': postID}))['comment']
 
-#     comments.append({
-#         'comment_num':comment_num,
-#         'email':email,
-#         'nickname':nickname,
-#         'comment':comment
-#     })
+    user_info = decode()
+    email = user_info['email']
+    nickname = user_info['nickname']
+
+    # 댓글 아이디는 어떻게 할까?
+    comments.append({
+        'comment_num':0,
+        'email':email,
+        'nickname':nickname,
+        'comment':comment
+    })
     
-#     db.feeds.update_one({'num': num}, {'$set': {'comment': comments}})
-#     return jsonify({'result': 'success', 'msg': '댓글 완료'})
+    db.post.update_one({'num': postID}, {'$set': {'comment': comments}})
+    return jsonify({'result': 'success', 'msg': '댓글 작성 완료'})
 
 
 
