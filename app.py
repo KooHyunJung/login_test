@@ -24,6 +24,14 @@ def decode():
     info = db.userinfo.find_one({'email':payload['id']})
     return info
 
+def post_info():
+    key = request.cookies.get('99token')
+    payload = jwt.decode(key, SECRET_KEY, algorithms='HS256')
+    
+    info = db.post.find_one({'email':payload['id']})
+    return info
+
+
 
 
 @app.route('/home')
@@ -130,7 +138,9 @@ def post():
         post_text = request.form['post_text']
         dt_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+        num = 0
         doc = {
+                'index': num +1,
                 'email' : email,
                 'nickname': nickname,
                 'pro_img': pro_img,
@@ -140,15 +150,28 @@ def post():
                 'comment': []
             }
         db.post.insert_one(doc)
+        num += 1
         return jsonify({'result': 'success','msg': '업로드 완료!'})
 
 
-# 게시물 붙이기
+# 게시물 보여주기
 @app.route("/post/get", methods=["GET"])
 def post_get():
     post_list = list(db.post.find({}, {'_id': False}))
     return jsonify({'post': post_list})
 
+
+# #게시물 삭제
+# @app.route('/post/delate', methods= ['POST'])
+# def post_delate():
+#     postID = request.form['postID']
+
+#     info = post_info()
+#     email = info['email']
+
+#     find = db.post.delete_one({'email':email, 'index':postID})    
+#     if find is not None:
+#         return jsonify({'result': 'success', 'msg': '삭제 완료'})
 
 
 

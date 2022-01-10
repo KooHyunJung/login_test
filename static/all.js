@@ -91,6 +91,7 @@ success: function (response) {
         // JS reverse()함수 사용해서 리스트로 받은 DB데이터를 역순정렬한다
         let row = rows.reverse()
         for (let i = 0; i < rows.length; i++) {
+            let index = row[i]['index']
             let nickname = row[i]['nickname']
             let pro_img = row[i]['pro_img']
             let post_url = row[i]['post_url']
@@ -104,7 +105,7 @@ success: function (response) {
                     <p>${nickname}</p>
                 </div>
                 <div class="right-wrapper">
-                    <img onclick="post_del()" value="0" src="../static/img/more@3x.png">
+                    <img onclick="post_del()" value=${index} src="../static/img/more@3x.png">
                 </div>
             </div>
             <div class="post-body">
@@ -152,6 +153,48 @@ success: function (response) {
     }
 }); 
 
+
+//게시물 삭제
+// function post_del() {
+//     let postID = $('value').val
+//     $.ajax({
+//         url: '/post/delate',
+//         data: {postID:postID},
+//         method: 'POST',
+//         dataType: 'json',
+//         success: function(response){
+//             if (response['result']=='success'){
+//                 alert(response['msg'])
+//                 window.console.log("완료")
+//             }
+//             else {
+//                 alert("작성자만 삭제 가능합니다")
+//                 console.log("실패")
+//             }
+//         }
+//     })
+// }
+
+
+// 게시물 댓글 저장
+// function comment(){
+//     let comment = $('#comment').val()
+//     $.ajax({
+//         url: "/comment",
+//         data: {comment:comment},
+//         method: 'POST',
+//         dataType: 'json',
+//         success:function(response){
+//             if (response['result']=='success'){
+//                 alert(response['msg'])
+//                 window.console.log("완료")
+//             }
+//             else {
+//                 window.console.log("실패")
+//             }
+//         }
+//     })
+// }
 
 //페이지 이동
 function to_post() {
