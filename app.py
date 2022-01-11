@@ -34,10 +34,12 @@ def post_info():
 
 
 
-
+# index.html 화면 이동 /게시물 보여주기
 @app.route('/home')
 def home():
-    return render_template('index.html')
+    post = list(db.post.find({}, {'_id': False}))
+    post_list = post[::-1]
+    return render_template('index.html',posts=post_list)
 
 
 #============================회원가입 // 로그인==================================
@@ -156,15 +158,6 @@ def post():
             }
         db.post.insert_one(doc)
         return jsonify({'result': 'success','msg': '업로드 완료!'})
-        
-        
-
-
-# 게시물 보여주기
-@app.route("/post/get", methods=["GET"])
-def post_get():
-    post_list = list(db.post.find({}, {'_id': False}))
-    return jsonify({'post': post_list})
 
 
 #게시물 삭제
@@ -182,7 +175,7 @@ def post_delate():
 
 #============================ POST 댓글 ====================================
 #댓글 DB 저장
-@app.route('/post/cmment', methods=['POST'])
+@app.route('/post/comment', methods=['POST'])
 def post_comment():
     comment = request.form['comment']
     postID = int(request.form['postID'])
@@ -191,10 +184,12 @@ def post_comment():
     user_info = decode()
     email = user_info['email']
     nickname = user_info['nickname']
+    pro_img = user_info['pro_img']
 
     # 댓글 아이디는 어떻게 할까?
     comments.append({
         'comment_num':0,
+        'pro_img':pro_img,
         'email':email,
         'nickname':nickname,
         'comment':comment

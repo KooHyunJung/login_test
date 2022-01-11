@@ -201,6 +201,7 @@ body {
   }
   .post-footer .post-test {
     display: flex;
+    margin-bottom: 3%;
   }
   .post-footer .post-test .post-author {
     margin: 0% 2% 0% 2%;
@@ -210,6 +211,30 @@ body {
   .post-footer .post-test .post-content {
     margin: 0%;
     font-size: 14px;
+  }
+  .post-footer .comment-box {
+    display: flex;
+  }
+  .post-footer .comment-box img {
+    width: 6%;
+    height: 6%;
+    border-radius: 50%;
+    border: 1px solid lightgray;
+    margin: 0 1%;
+  }
+  .post-footer .comment-box .comment-author {
+    margin: 1% 2% 1% 2%;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .post-footer .comment-box .comment-content {
+    margin: 1% 2% 1% 2%;
+    font-size: 14px;
+  }
+  .post-footer .comment-box .comment-btn {
+    margin: 1% 2% 1% 2%;
+    font-size: 14px;
+    color : gray;
   }
   .post-footer .post-time {
     color: gray;
@@ -222,12 +247,6 @@ body {
 
 
   /* 댓글 CSS */
-  .post-comment {
-    display: flex;
-    justify-content: flex-start;
-    margin: 0% 2% 0% 2%;
-    font-size: 14px;
-  }
   .comment-input-box {
     display: flex;
     justify-content: flex-start;
@@ -246,14 +265,7 @@ body {
   .comment-input-box label {
     color: rgb(0, 115, 255)
   }
-  /* 달린 댓글 */
-  #comment-box .post-comment p {
-    padding: 1% 2% 0% 0%;
-    font-size: 110%;
-  }
-  #comment-box .post-commen .comment-btn {
-    color : rgb(0, 115, 255);
-  }
+  
 
 
 
